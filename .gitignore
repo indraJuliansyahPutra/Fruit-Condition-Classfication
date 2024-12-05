@@ -1,0 +1,6 @@
+# Virtual Environment
+myenv/
+
+# Static files
+static/model/
+static/uploads/

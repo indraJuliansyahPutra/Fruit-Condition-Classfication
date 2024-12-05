@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Klasifikasi Buah</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <!-- Link ke Google Fonts untuk Lexend Deca -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet" />
+    <style>
+      /* Untuk memastikan tinggi upload_card dan result_card sama */
+      
+      /* Untuk menyesuaikan ukuran gambar di result_card */
+      #resultImage {
+        max-width: 100%; /* Batasi lebar maksimum sesuai container */
+        height: auto; /* Jaga proporsi gambar */
+        max-height: 300px; /* Batasi tinggi maksimum */
+        object-fit: cover; /* Jaga agar seluruh gambar terlihat */
+      }
+      
+      @media (max-width: 768px) {
+        #cameraContainer {
+          width: 100%;
+          height: auto;
+        }
+      
+        #video {
+          width: 100%;
+          height: auto;
+          border-radius: 10px;
+        }
+      
+        #capturedImage {
+          max-width: 100%;
+          height: auto;
+          border-radius: 10px;
+        }
+      
+        .camera-container .btn {
+          width: 100%;
+        }
+      }
+      /* Menambahkan font Lexend Deca ke seluruh halaman */
+      body {
+        font-family: 'Outfit', sans-serif;
+        padding-top: 70px;
+        padding-bottom: 60px;
+      }
+      
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        background-color: #f7f1e5;
+        box-shadow: 0 4px 6px rgba(255, 165, 0, 0.3);
+        /* Lighter shadow with less opacity */
+        z-index: 10;
+      }
+      
+      .navbar .navbar-brand {
+        color: #e7b10a;
+        /* Orange color */
+      }
+      
+      .navbar .nav-link {
+        color: #e7b10a;
+        /* Orange color */
+      }
+      
+      .navbar-scrolled {
+        box-shadow: 0 4px 6px rgba(255, 165, 0, 0.3);
+        /* Slightly lighter shadow on scroll */
+      }
+      
+      /* Navbar mobile, adjusting space between logo and text */
+      @media (max-width: 767px) {
+        .navbar-brand {
+          margin-left: 15px;
+        }
+      }
+      
+      /* Footer tetap */
+      .footer {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        background-color: #f7f1e5;
+      }
+      
+      /* Atur agar konten utama memiliki jarak dari navbar dan footer */
+      .jumbotron {
+        padding: 4rem 2rem;
+      }
+      
+      .jumbotron h1 {
+        font-size: 2.5rem;
+      }
+      
+      .jumbotron p {
+        font-size: 1.25rem;
+      }
+      
+      @media (min-width: 768px) {
+        .jumbotron h1 {
+          font-size: 3.5rem;
+        }
+      
+        .jumbotron p {
+          font-size: 1.5rem;
+        }
+      }
+      
+      /* Border and styling for the upload form and result container */
+      #uploadSection .border {
+        border: 2px solid #f0f0f0;
+        /* Light grey border */
+        background-color: #fff;
+        /* White background for the form */
+        border-radius: 12px;
+        /* Rounded corners */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow */
+      }
+      
+      /* Styling for the button hover effect */
+      #uploadSection .btn {
+        transition: all 0.3s ease;
+      }
+      
+      #uploadSection .btn:hover {
+        background-color: #ff8b13;
+        /* Hover effect color */
+        border-color: #ff8b13;
+      }
+      
+      /* Make buttons full width on mobile */
+      #uploadSection .btn {
+        width: 100%;
+      }
+      
+      /* Customizing the file input */
+      #uploadSection input[type='file'] {
+        border: 1px solid #ced4da;
+        /* Custom border for file input */
+        border-radius: 5px;
+        padding: 8px;
+      }
+      
+      /* Make the layout stack vertically on mobile screens */
+      @media (max-width: 767px) {
+        /* For full-width buttons on smaller screens */
+        #uploadSection .btn {
+          width: 100%;
+        }
+      
+        #uploadSection .camera-container {
+          margin-top: 20px;
+        }
+      }
+      
+      /* Card padding for both desktop and mobile */
+      #uploadSection .card {
+        padding-left: 20px;
+        /* Padding on the left */
+        padding-right: 20px;
+        /* Padding on the right */
+      }
+      
+      /* For mobile responsiveness: additional padding */
+      @media (max-width: 767px) {
+        #uploadSection .card {
+          padding-left: 15px;
+          /* Slightly reduced padding on mobile */
+          padding-right: 15px;
+          /* Slightly reduced padding on mobile */
+        }
+      }
+      
+      /* Add margin between cards */
+      #uploadSection .col-md-6 {
+        margin-bottom: 30px;
+        /* Add spacing between the left and right cards */
+      }
+      
+      /* Style the uploaded image in the result card */
+      #uploadSection .card img {
+        max-width: 100%;
+        /* Ensure the image fits within the card */
+        height: auto;
+        border-radius: 8px;
+        /* Optional: Adds rounded corners to the image */
+      }
+      
+      /* Card content */
+      #uploadSection .card .card-title {
+        font-size: 1.2rem;
+        margin-top: 1rem;
+        color: #473c33;
+      }
+      
+      #uploadSection .card .card-text {
+        font-size: 1rem;
+        color: #473c33;
+      }
+      
+      /* Card layout styles */
+      #uploadSection .card {
+        padding: 1.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      /* Image styling untuk card result saja */
+      .result-card img.img-fluid {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        margin-bottom: 1rem;
+      }
+      
+      /* Button styling */
+      .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        transition: all 0.3s ease;
+      }
+      
+      .btn-warning:hover {
+        background-color: #ff8b13;
+        border-color: #ff8b13;
+      }
+      
+      /* Buka Kamera button styling */
+      .btn-outline-warning {
+        color: #ffc107;
+        border-color: #ffc107;
+      }
+      
+      .btn-outline-warning:hover {
+        color: white;
+        background-color: #ff8b13;
+        border-color: #ff8b13;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          <img src="static/assets/images/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" />
+          Klasifikasi Buah
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#uploadSection">Upload Gambar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#resultSection">Hasil Prediksi</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Jumbotron -->
+    <div class="jumbotron py-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h1 class="display-4 fw-bold text-warning">Klasifikasi Buah Busuk dan Sehat</h1>
+            <p class="fs-6">Unggah gambar buah atau ambil foto langsung untuk menentukan apakah buah tersebut sehat atau busuk.</p>
+
+            <div class="d-flex justify-content-start gap-3 mt-3">
+              <a href="#uploadSection" class="btn btn-warning btn-lg fs-6 lead">Mulai Klasifikasi</a>
+              <a href="#aboutSection" class="btn btn-outline-warning btn-lg fs-6">Tentang</a>
+            </div>
+          </div>
+          <div class="col-md-6 text-center">
+            <img src="static/assets/images/jumbotron.png" class="img-fluid rounded" alt="Klasifikasi Buah" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Section -->
+    <div id="uploadSection" class="container my-5">
+      <h2 class="text-center mb-4 display-4 fw-bold text-warning">Upload Gambar</h2>
+      <div class="row">
+        <div class="col-md-12 mb-4" id="uploadFormContainer">
+          <div class="card">
+            <form id="uploadForm">
+              <div class="mb-3">
+                <input type="file" name="image" class="form-control" id="imageUpload" required onchange="previewImage()" />
+              </div>
+
+              <button type="button" class="btn btn-outline-warning w-100 mb-2" onclick="openCamera()">Buka Kamera</button>
+
+              <div class="camera-container text-center mb-3" id="cameraContainer" style="display: none">
+                <div class="embed-responsive embed-responsive-16by9">
+                  <video id="video" class="embed-responsive-item" autoplay></video>
+                </div>
+                <button type="button" class="btn btn-primary mt-2" onclick="captureImage()">Ambil Gambar</button>
+              </div>
+
+              <canvas id="canvas" style="display: none"></canvas>
+              <div class="mt-3">
+                <img id="capturedImage" class="img-fluid rounded" style="display: none" />
+              </div>
+
+              <button type="submit" class="btn btn-warning w-100 mt-2">Upload dan Klasifikasikan</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-md-12 mb-4" id="resultSection" style="display: none">
+          <div class="card result-card">
+            <div class="text-center">
+              <img id="resultImage" class="img-fluid" alt="Uploaded Image" />
+              <h5 class="card-title"><span class="badge bg-warning text-dark fs-4" id="predictionLabel"></span></h5>
+              <p class="card-text text-dark">
+                Confidence: <strong id="confidenceLabel"></strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer py-3">
+      <div class="container text-center">
+        <p class="mb-0">© 2024 Klasifikasi Buah. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+      // Fungsi untuk menampilkan preview gambar setelah dipilih
+      function previewImage() {
+        const fileInput = document.getElementById('imageUpload')
+        const imagePreview = document.getElementById('capturedImage')
+        const file = fileInput.files[0]
+      
+        if (file) {
+          const reader = new FileReader()
+      
+          reader.onload = function (e) {
+            imagePreview.src = e.target.result
+            imagePreview.style.display = 'block' // Tampilkan gambar
+          }
+      
+          reader.readAsDataURL(file) // Membaca file gambar
+        } else {
+          imagePreview.style.display = 'none' // Jika tidak ada gambar
+        }
+      }
+      
+      // Fungsi untuk membuka kamera
+      let stream
+      function openCamera() {
+        document.getElementById('cameraContainer').style.display = 'block'
+        const video = document.getElementById('video')
+      
+        navigator.mediaDevices
+          .getUserMedia({ video: { facingMode: 'environment' } })
+          .then((mediaStream) => {
+            stream = mediaStream
+            video.srcObject = mediaStream
+          })
+          .catch((error) => {
+            console.error('Error accessing camera: ', error)
+          })
+      }
+      
+      // Fungsi untuk menangkap gambar dari kamera
+      function captureImage() {
+        const video = document.getElementById('video')
+        const canvas = document.getElementById('canvas')
+        const capturedImage = document.getElementById('capturedImage')
+      
+        canvas.width = video.videoWidth
+        canvas.height = video.videoHeight
+        const context = canvas.getContext('2d')
+        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+      
+        capturedImage.src = canvas.toDataURL('image/png')
+        capturedImage.style.display = 'block'
+        document.getElementById('imageUpload').required = false
+      
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop())
+          video.srcObject = null
+        }
+      
+        document.getElementById('cameraContainer').style.display = 'none'
+      
+        canvas.toBlob((blob) => {
+          const fileInput = document.getElementById('imageUpload')
+          const file = new File([blob], 'captured_image.png', { type: 'image/png' })
+          const dataTransfer = new DataTransfer()
+          dataTransfer.items.add(file)
+          fileInput.files = dataTransfer.files
+        })
+      }
+      
+      // Handle form submission
+      document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        event.preventDefault() // Prevent default form submission
+      
+        const formData = new FormData(this)
+        const resultSection = document.getElementById('resultSection')
+        const uploadFormContainer = document.getElementById('uploadFormContainer')
+      
+        fetch('/api/predict', {
+          method: 'POST',
+          body: formData
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Update result section
+            document.getElementById('resultImage').src = data.image_url
+            document.getElementById('predictionLabel').innerText = data.prediction
+            document.getElementById('confidenceLabel').innerText = `${data.confidence.toFixed(2)}%`
+      
+            // Tampilkan result section
+            resultSection.style.display = 'block'
+            uploadFormContainer.classList.remove('col-md-12')
+            uploadFormContainer.classList.add('col-md-8')
+            resultSection.classList.remove('col-md-12')
+            resultSection.classList.add('col-md-4')
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+          })
+      })
+      
+      // Menambahkan efek saat scroll
+      window.addEventListener('scroll', function () {
+        const navbar = document.querySelector('.navbar')
+        if (window.scrollY > 10) {
+          navbar.classList.add('navbar-scrolled')
+        } else {
+          navbar.classList.remove('navbar-scrolled')
+        }
+      })
+    </script>
+  </body>
+</html>

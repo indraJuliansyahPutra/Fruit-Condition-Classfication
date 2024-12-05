@@ -1,0 +1,167 @@
+body {
+    font-family: "Outfit", sans-serif;
+    padding-top: 70px;
+    padding-bottom: 60px;
+  }
+  
+  /* Navbar */
+  .navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #F7F1E5;
+    box-shadow: 0 4px 6px rgba(255, 165, 0, 0.3);
+    z-index: 10;
+  }
+  
+  .navbar .navbar-brand {
+    color: #E7B10A;
+  }
+  
+  .navbar .nav-link {
+    color: #E7B10A;
+  }
+  
+  .navbar-scrolled {
+    box-shadow: 0 4px 6px rgba(255, 165, 0, 0.3);
+  }
+  
+  @media (max-width: 767px) {
+    .navbar-brand {
+      margin-left: 15px;
+    }
+  }
+  
+  /* Footer tetap */
+  .footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    background-color: #F7F1E5;
+  }
+  
+  /* Jumbotron */
+  .jumbotron {
+    padding: 4rem 2rem;
+  }
+  
+  .jumbotron h1 {
+    font-size: 2.5rem;
+  }
+  
+  .jumbotron p {
+    font-size: 1.25rem;
+  }
+  
+  @media (min-width: 768px) {
+    .jumbotron h1 {
+      font-size: 3.5rem;
+    }
+  
+    .jumbotron p {
+      font-size: 1.5rem;
+    }
+  }
+  
+  /* Upload Section */
+  #uploadSection .border {
+    border: 2px solid #f0f0f0;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  #uploadSection .btn {
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  #uploadSection .btn:hover {
+    background-color: #FF8B13;
+    border-color: #FF8B13;
+  }
+  
+  #uploadSection input[type="file"] {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 8px;
+  }
+  
+  @media (max-width: 767px) {
+    #uploadSection .btn {
+      width: 100%;
+    }
+  
+    #uploadSection .camera-container {
+      margin-top: 20px;
+    }
+  }
+  
+  /* Card Styles */
+  #uploadSection .card {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 767px) {
+    #uploadSection .card {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+  
+  #uploadSection .col-md-6 {
+    margin-bottom: 30px;
+  }
+  
+  #uploadSection .card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  #uploadSection .card .card-title {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    color: #473C33;
+  }
+  
+  #uploadSection .card .card-text {
+    font-size: 1rem;
+    color: #473C33;
+  }
+  
+  /* Result Card */
+  .result-card img.img-fluid {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  
+  /* Button Styles */
+  .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-warning:hover {
+    background-color: #FF8B13;
+    border-color: #FF8B13;
+  }
+  
+  .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+  }
+  
+  .btn-outline-warning:hover {
+    color: white;
+    background-color: #FF8B13;
+    border-color: #FF8B13;
+  }
