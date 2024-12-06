@@ -1,0 +1,2 @@
+Because the file is so big, we upload the model in google drive. You can access the model through the link below:
+https://drive.google.com/drive/folders/1ypMrphwLhxlR7gsCYd6yziqpvHxD_mQq?usp=sharing
